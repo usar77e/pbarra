@@ -1,40 +1,60 @@
 package com.daniele.pbarra.manager.impl;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.daniele.pbarra.manager.SucursalManager;
 import com.daniele.pbarra.model.Sucursal;
+import com.daniele.pbarra.repository.SucursalRepository;
+
+import exceptions.ModelNotFoundException;
 
 public class SucursalManagerImpl implements SucursalManager{
 
+	@Autowired
+	private SucursalRepository sucurepo;
+	
 	@Override
 	public List<Sucursal> findAll() {
 		// TODO Auto-generated method stub
-		return null;
+		return sucurepo.findAll();
 	}
 
 	@Override
 	public Sucursal findById(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		Optional<Sucursal> sucursal = sucurepo.findById(id);
+		if(sucursal.isPresent()) {
+			return sucursal.get();
+		}
+		throw new ModelNotFoundException("Sucursal no encontrada");
 	}
 
 	@Override
 	public Sucursal save(Sucursal e) {
 		// TODO Auto-generated method stub
-		return null;
+		Sucursal sucursal = new Sucursal();
+		try {
+			sucursal = sucurepo.save(e);
+		} catch(Exception ex) {
+			throw new ModelNotFoundException("Sucursal no guardada");
+		}
+		return sucursal;
 	}
 
 	@Override
 	public Sucursal update(Sucursal e) {
 		// TODO Auto-generated method stub
-		return null;
+		return save(e);
 	}
 
 	@Override
 	public boolean delete(Integer id) {
 		// TODO Auto-generated method stub
-		return false;
+		sucurepo.deleteById(id);
+		return true;
 	}
 	
 }
