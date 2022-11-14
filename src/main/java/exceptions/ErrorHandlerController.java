@@ -27,4 +27,13 @@ public class ErrorHandlerController {
 		model.addAttribute("timestamp", new Date());
 		return "error/numero-formato";
 	}
+	
+	@ExceptionHandler(TemplateNoEcontradoException.class)
+	public String templateNoEcontradoException(TemplateNoEcontradoException ex, Model model) {
+		model.addAttribute("error", "Formato numero incorrecto");
+		model.addAttribute("message", ex.getMessage());
+		model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+		model.addAttribute("timestamp", new Date());
+		return "error/template-no-encontrado";
+	}
 }

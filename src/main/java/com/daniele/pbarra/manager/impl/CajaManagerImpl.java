@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.daniele.pbarra.manager.CajaManager;
 import com.daniele.pbarra.model.Caja;
@@ -11,6 +12,7 @@ import com.daniele.pbarra.repository.CajaRepository;
 
 import exceptions.ModelNotFoundException;
 
+@Service
 public class CajaManagerImpl implements CajaManager{
 
 	@Autowired

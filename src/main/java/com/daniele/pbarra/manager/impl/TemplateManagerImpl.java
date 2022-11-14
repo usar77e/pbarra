@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.daniele.pbarra.manager.TemplateManager;
 import com.daniele.pbarra.model.Template;
 import com.daniele.pbarra.repository.TemplateRepository;
 
 import exceptions.ModelNotFoundException;
+import exceptions.TemplateNoEcontradoException;
 
+@Service
 public class TemplateManagerImpl implements TemplateManager{
 
 	@Autowired
@@ -29,7 +32,7 @@ public class TemplateManagerImpl implements TemplateManager{
 		if(template.isPresent()) {
 			return template.get();
 		}
-		throw new ModelNotFoundException("Template no encontrado");
+		throw new TemplateNoEcontradoException("Template no encontrado");
 	}
 
 	@Override

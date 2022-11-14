@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.daniele.pbarra.manager.SucursalManager;
 import com.daniele.pbarra.model.Sucursal;
@@ -11,6 +12,7 @@ import com.daniele.pbarra.repository.SucursalRepository;
 
 import exceptions.ModelNotFoundException;
 
+@Service
 public class SucursalManagerImpl implements SucursalManager{
 
 	@Autowired
