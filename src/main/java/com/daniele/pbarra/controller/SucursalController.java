@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.daniele.pbarra.model.Sucursal;
 import com.daniele.pbarra.service.SucursalService;
 
-@Controller
+@RestController
 @RequestMapping(value = "/sucursal")
 public class SucursalController {
 	@Autowired

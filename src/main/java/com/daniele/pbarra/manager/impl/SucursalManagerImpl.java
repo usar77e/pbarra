@@ -11,6 +11,7 @@ import com.daniele.pbarra.model.Sucursal;
 import com.daniele.pbarra.repository.SucursalRepository;
 
 import exceptions.ModelNotFoundException;
+import exceptions.SucursalNoEncontradoException;
 
 @Service
 public class SucursalManagerImpl implements SucursalManager{
@@ -31,7 +32,7 @@ public class SucursalManagerImpl implements SucursalManager{
 		if(sucursal.isPresent()) {
 			return sucursal.get();
 		}
-		throw new ModelNotFoundException("Sucursal no encontrada");
+		throw new SucursalNoEncontradoException("Sucursal no encontrada");
 	}
 
 	@Override
