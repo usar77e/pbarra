@@ -1,11 +1,15 @@
 package com.daniele.pbarra.controller;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import org.krysalis.barcode4j.BarcodeDimension;
+import org.krysalis.barcode4j.TextAlignment;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -119,7 +123,13 @@ public class CodigoBarraController {
 			//@RequestParam(value = "bufx", required = true) Integer bufx,
 			//@RequestParam(value = "bufy", required = true) Integer bufy,
 			@RequestParam(value = "nombreBarra", required = true) String nombreImagenBarra,
-			@RequestParam(value = "tamanioBarra", required = true) Integer tamanioBarra
+			@RequestParam(value = "tamanioBarra", required = true) Integer tamanioBarra,
+			@RequestParam(value = "nombreFinal", required = true) String nombreFinal,
+			@RequestParam(value = "poscodigox", required = true) Integer poscodigox,
+			@RequestParam(value = "poscodigoy", required = true) Integer poscodigoy,
+			@RequestParam(value = "postitulox", required = true) Integer postitulox,
+			@RequestParam(value = "postituloy", required = true) Integer postituloy,
+			@RequestParam(value = "sizetitulo", required = true) Integer sizetitulo
 			
 			) {
 		File target = new File(ruta + template);
@@ -150,7 +160,8 @@ public class CodigoBarraController {
 				//saca el valor ancho y el alto del template seleccionada
 				templateHeight = imagenFondo.getHeight();
 				templateWidth = imagenFondo.getWidth();
-				
+				Integer posWidth =  templateWidth - ((templateWidth * poscodigox) /100);
+				Integer posHeight = templateHeight - ((templateHeight * poscodigoy) /100);
 				
 				//se crea la imagen en donde se juntara todo ->  6
 				//BufferedImage imagenFinal = new BufferedImage(bufx, bufy, BufferedImage.TYPE_INT_ARGB);
@@ -158,17 +169,23 @@ public class CodigoBarraController {
 				
 				//manipulador 2g ->  7
 				Graphics2D grap = imagenFinal.createGraphics();
+				//agregar texto al template
+				grap.setPaint(Color.BLACK);
+				grap.setFont(new Font("Helvetica medium", Font.BOLD, sizetitulo));
+				//grap.drawString("Hola Mundo", 1000, 1000);
+				
 				// ->  8
 				//grap.drawImage(imagenFondo, 0, 0, 1692, 1692, null);
-				//dimensiones de imagen de fondo -> tiene que teer las mismas dimensiones que la imagen de fondo
+				//dimensiones de imagen de fondo -> tiene que tener las mismas dimensiones que la imagen de fondo
 				//grap.drawImage(imagenFondo, 0, 0, 500, 250, null);
 				grap.drawImage(imagenFondo, 0, 0, templateWidth, templateHeight, null);
 				//->  9
 				//ubicacion del codigo de barra dentro del template
 				//grap.drawImage(imagenFinal, 45, 45, null);
-				grap.drawImage(imagenBarra, 10, 10, barraWidth, barraHeight, null);
+				grap.drawImage(imagenBarra, posWidth, posHeight, barraWidth, barraHeight, null);
+				grap.drawString("Hola Mundo", postitulox, postituloy);
 				//->  10
-				ImageIO.write(imagenFinal, extension, new File(rutadestino + "imagen_de_pruebab2b" + "." + extension));
+				ImageIO.write(imagenFinal, extension, new File(rutadestino + nombreFinal + "." + extension));
 			} catch (Exception ex) {
 				System.out.print("Excepcion " + ex);
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -185,8 +202,25 @@ public class CodigoBarraController {
 	    EAN13Bean barcodeGenerator = new EAN13Bean();
 	    BitmapCanvasProvider canvas = 
 	      //new BitmapCanvasProvider(160, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-	      new BitmapCanvasProvider(800, BufferedImage.TYPE_BYTE_BINARY, false, 0);
-
+	      new BitmapCanvasProvider(tamanioBarra, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+	    
+	    //prueba con metodos propios de BitmapCanvasProvider
+	    //hasta el momento pruebas no reflejan cambios en el producto final
+	    //son un fracaso
+	    //establecer dimensiones
+	    //BarcodeDimension dim = new BarcodeDimension(414, 84);
+	    //BarcodeDimension dim = new BarcodeDimension(828, 168);
+	    //canvas.establishDimensions(dim);
+	    
+	    //draw text, prueba de creacion de texto en
+	    
+	    //TextAlignment typecenter = TextAlignment.TA_CENTER;
+	    //TextAlignment typejustify = TextAlignment.TA_JUSTIFY;
+	      
+	    //String texto = "写的比较马虎 这里仅仅是一个思路吧";
+	    //canvas.deviceText("Hola mundo", 100, 100, 100, "Serif", 100, typecenter);
+	    //canvas.deviceText(texto, 100, 100, 100, "Dialog", 1000, typecenter);
+	    
 	    barcodeGenerator.generateBarcode(canvas, barcodeText);
 	    return canvas.getBufferedImage();
 	}
